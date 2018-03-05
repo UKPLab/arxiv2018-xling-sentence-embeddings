@@ -1,0 +1,4 @@
+*.pyc
+*.iml
+.idea
+model/data

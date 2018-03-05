@@ -1,0 +1,9 @@
+PyYAML
+click
+progressbar2
+lxml
+tensorflow
+scipy
+XlsxWriter
+backports.tempfile
+sklearn

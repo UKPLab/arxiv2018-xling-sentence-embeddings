@@ -1,0 +1,53 @@
+#
+# This configuration defines a set of runs to be executed with run_multiple_optim_lr.py
+#
+
+# name of the report. However, for each task a separate report will be written (e.g. report-AC_fr.xlsx)
+report: report.xlsx
+
+logger:
+  level: INFO
+
+# It is possible to define different tasks that will be evaluated sequentially. Each task will get its own report
+tasks:
+  # name of the task
+  - name: AC_fr
+    # number of repeated subsample runs
+    repetitions: 50
+    # the base configuration for this task. It contains different placeholders that are filled by the specific runs.
+    # see the configuration file for more details
+    config: configs/subsample_templates/AC.yaml
+    # it is possible to define many different runs to evaluate different types of sentence embeddings
+    runs:
+      # this is the name of the run as it will appear in the excel report
+      - name: AVG_BIVCD/en.en-fr
+        # the language the model (usually logreg) will be trained on
+        language: fr
+        # the embedding types to use. different embedding types means concatenation
+        embedding_types: [mapped_bivcd_en_fr]
+        # the operations (or p-means). they they will be applied to all word embeddings
+        operations: [mean]
+      - name: AVG_Attractrepel/en.en-fr
+        language: fr
+        embedding_types: [mapped_attract_repel_en_fr]
+        operations: [mean]
+      - name: AVG_Fasttext/en.en-fr
+        language: fr
+        embedding_types: [mapped_fasttext_en_fr]
+        operations: [mean]
+  - name: AC_de
+    repetitions: 50
+    config: configs/subsample_templates/AC.yaml
+    runs:
+      - name: AVG_BIVCD/en.en-de
+        language: de
+        embedding_types: [mapped_bivcd_en_de]
+        operations: [mean]
+      - name: AVG_Attractrepel/en.en-de
+        language: de
+        embedding_types: [mapped_attract_repel_en_de]
+        operations: [mean]
+      - name: AVG_Fasttext/en.en-de
+        language: de
+        embedding_types: [mapped_fasttext_en_de]
+        operations: [mean]

@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Sentence Embeddings Webserver</title>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            color: #444444;
+        }
+
+        h1, h2 {
+            color: #000;
+        }
+
+        h1 {
+            border-bottom: 3px solid #333;
+            border-top: 2px solid #333;
+            padding: 6px 0;
+            margin: 30px 0 15px 0;
+        }
+
+        h2 {
+            border-top: 1px solid #333;
+            border-bottom: 2px solid #333;
+            padding: 4px 0;
+            margin: 60px 0 15px 0;
+        }
+
+        .main-container {
+            max-width: 900px;
+        }
+
+        p {
+            padding-right: 100px;
+        }
+
+        pre.url {
+            padding: 0;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        table {
+            margin: 20px 0!important;
+        }
+
+        tr.bg-code-dark {
+            background-color: #1377d5;
+            color: #fff;
+        }
+
+        tr.bg-code-dark th {
+            border: 1px solid #1060ad;
+        }
+
+        tr.bg-code {
+            background-color: #eaeaea;
+            color: #404040;
+        }
+
+        tr.bg-code td {
+            border: 1px solid #c4c4c4;
+        }
+
+        tr.bg-code pre.extra {
+            color: #404040;
+            background-color: #dfdfdf;
+            padding: 10px;
+        }
+
+    </style>
+
+
+</head>
+<body>
+<div class="main-container d-flex h-100 p-3 mx-auto flex-column">
+    <main role="main">
+        <h1>Sentence Embeddings Webserver</h1>
+        <div class="content">
+            <p>We've started up a webserver that provides a simple HTTP API (with only one method) that enables
+                you to generate <i>concatenated p-mean sentence embeddings</i>.</p>
+            <p>The current loaded model is "<strong>{{ model_name }}</strong>".</p>
+        </div>
+
+        <h2>API: Convert Sentences to Embeddings</h2>
+        <p>This is the only endpoint of our API. You can pass a list of sentences for which concatenated p-mean
+            sentence embeddings will be generated. We recommend a maximum number of 500 sentences per request.
+            Sentences should be already tokenized (tokens separated by spaces).</p>
+
+        <pre class="url">POST /embed</pre>
+
+        <table class="table">
+            <thead>
+            <tr class="bg-code-dark">
+                <th scope="col">Parameter</th>
+                <th scope="col">Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="bg-code">
+                <td><strong>conversion</strong></td>
+                <td>
+                    <p>A JSON string that contains input sentences and a list of embedding types and p-means that should
+                        be concatenated:</p>
+
+                    <pre class="extra">{
+    {%- if model_name.startswith('en') %}
+    'sentences': ['first_en sentence_en', 'second_en sentence_en'],
+    {%- else %}
+    'sentences': ['first sentence', 'second sentence'],
+    {%- endif %}
+    'embedding_types': [
+        {%- for e in embeddings %}
+        ('{{ e.alias }}', ['mean', 'min', 'max', 'p_mean_3']),
+        {%- endfor %}
+    ]
+}</pre>
+
+                    <p>
+                        Available embeddings:
+                        {% for e in embeddings %} <span class="badge badge-secondary">{{ e.alias }}</span> {% endfor %}
+                    <br>
+                        Available p-means:
+                        {% for op in operations %} <span class="badge badge-secondary">{{ op }}</span> {% endfor %}
+                    </p>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <p>
+            <strong>Response</strong><br> One sentence embedding per line that corresponds to the ith input sentence.
+        </p>
+
+
+        <h2>Example Code: Python Request Builder</h2>
+        <p>Here you can generate python code to query the API with the chosen embeddings and p-means!</p>
+
+        <div class="row">
+            <div class="col-sm" id="wordEmbeddings">
+                <strong>Word Embeddings</strong>
+                {%- for e in embeddings %}
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="{{ e.alias }}" checked>
+                    <label class="form-check-label" for="{{ e.alias }}">{{ e.alias }}</label>
+                </div>
+                {%- endfor %}
+            </div>
+            <div class="col-sm" id="pMeans">
+                <strong>p-means</strong>
+                {%- for op in operations %}
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="{{ op }}" {% if op== 'mean' %}checked{% endif
+                    %}>
+                    <label class="form-check-label" for="{{ op }}">{{ op }}</label>
+                </div>
+                {%- endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg">
+                <table class="table">
+                    <thead>
+                    <tr class="bg-code-dark">
+                        <th scope="col">Generated Code</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="bg-code">
+                        <td>
+                            <pre id="code"></pre>
+                        </td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+        </div>
+        <p>&nbsp;</p>
+
+    </main>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+
+<script>
+    $(function () {
+        var embeddingsInputs = $('#wordEmbeddings input');
+        var pMeansInput = $('#pMeans input');
+        embeddingsInputs.change(onChange);
+        pMeansInput.change(onChange);
+
+        function onChange() {
+            var pMeans = [];
+            pMeansInput.each(function (_, e) {
+                var $e = $(e);
+                if ($e.is(':checked')) {
+                    pMeans.push("'" + $e.attr('id') + "'")
+                }
+            });
+
+            var types = [];
+            embeddingsInputs.each(function (_, e) {
+                var $e = $(e);
+                if ($e.is(':checked')) {
+                    types.push("('" + $e.attr('id') + "', [" + pMeans.join(', ') + '])')
+                }
+            });
+
+
+            var code = `import requests
+import json
+import numpy as np
+
+config = {
+{%- if model_name.startswith('en') %}
+    'sentences': ['first_en sentence_en', 'second_en sentence_en'],
+{%- else %}
+    'sentences': ['first sentence', 'second sentence'],
+{%- endif %}
+    'embedding_types': [
+        ${types.join(',\n        ')}
+    ]
+}
+
+r = requests.post('http://{{ host }}/embed', data={'conversion':json.dumps(config)})
+if r.status_code == 200:
+    embeddings = [np.fromstring(e, sep=' ') for e in r.text.split('\\n') if e]
+    print('got {} sentence embeddings!'.format(len(embeddings)))
+else:
+    print(r.text)
+`;
+            $('#code').text(code)
+        }
+
+        onChange();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+# This is the data module that will be loaded. It defines the data loading procedure. The data_EMB_server relies on
+# the embeddings webserver subproject to get average sentence embeddings for learning a mapping.
+data-module: experiment.mapping.data_EMB_server
+
+# The model module defines the model architecture. transform_both_separate learns a mapping for both languages
+#separately, which is similar to CCA
+model-module: experiment.mapping.model.transform_both_separate
+
+# Training module implements the batched training procedure, early stopping etc.
+training-module: experiment.mapping.train
+
+# The evaluation module will also measure validation performance. The chosen approach is rather slow (translation
+#retrieval). If speed is an issue, just run for 80 epochs without early stopping (this has to be implemented, though).
+evaluation-module: experiment.mapping.evaluation
+
+logger:
+  level: DEBUG
+
+global:
+  # no global configuration
+  empty: true
+
+#
+# ----
+# The following configuration objects will be fed into the individual modules configured above
+#
+
+data:
+  # the url of the embeddings webserver
+  embeddings_webserver_url: http://127.0.0.1:5000
+
+  # the alias of the word embeddings that should be queried in the embeddings webserver. We will learn a mapping for
+  # those embeddings
+  word_embedding_alias: fasttext_en_de
+
+  # path of the aligned sentences in language a. They have to be tokenized (tokens separated by spaces). Tokens should
+  # be postfixed with their language (such as the word embeddings)
+  train_path_a: path/to/europarl.train.en_flag
+
+  # path of the aligned sentences in language b (line number 1 is a translation of text in line number 1 of lang_a file)
+  train_path_b: path/to/europarl.train.de_flag
+
+  # maximum number of sentences (lines) to load
+  max_load: 1000000
+
+  # ratio of sentences to use for translation retrieval which allows us to measure validation/test performance
+  valid_ratio: 0.02
+  test_ratio: 0.02
+
+  # the language_a and language_b that should be mapped into common vector space
+  lang_a: en
+  lang_b: de
+
+model:
+  # margin parameter of the max-margin hinge loss
+  margin: 0.5
+
+training:
+  # folder where checkpoint files will be stored (used for early stopping)
+  save_folder: checkpoint-folder
+  # max. number of epochs
+  epochs: 100
+  # number of epochs to wait for valid improvements until early stopping will be performed
+  early_stopping_patience: 5
+  # Dropout ratio on the sentence representations
+  dropout: 0.5
+
+  optimizer: adam
+  initial_learning_rate: 0.001
+  dynamic_learning_rate: false
+
+  batchsize: 128
+  batchsize_valid: 200
+
+evaluation:
+  # we want to do evaluation
+  skip: false
+
+  # starts a webserver after evaluation that provides the mapping API that allows us to map arbitrary word embeddings
+  # (potentially even sentence embeddings)
+  webserver:
+    port: 8099

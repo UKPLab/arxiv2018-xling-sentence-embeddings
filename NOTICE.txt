@@ -1,0 +1,23 @@
+-------------------------------------------------------------------------------
+Copyright 2018
+Ubiquitous Knowledge Processing (UKP) Lab
+Technische Universität Darmstadt
+
+-------------------------------------------------------------------------------
+Third party legal information
+
+We include translated variants of the SNLI corpus (https://nlp.stanford.edu/projects/snli/)
+
+"The Stanford Natural Language Inference Corpus by The Stanford NLP Group is 
+licensed under a Creative Commons Attribution-ShareAlike 4.0 International 
+License. Based on a work at http://shannon.cs.illinois.edu/DenotationGraph/."
+
+Our derivations are under the same Creative Commons Attribution-ShareAlike 4.0 
+International License.
+
+
+We adapt Fasttext pre-trained word embeddings. 
+
+"The pre-trained word vectors are distributed under the Creative Commons Attribution-Share-Alike License 3.0." 
+
+Our derivations are under the same Creative Commons Attribution-Share-Alike License 3.0.
