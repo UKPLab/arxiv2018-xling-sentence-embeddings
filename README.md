@@ -1,6 +1,6 @@
 # Concatenated p-mean Embeddings as Universal Cross-Lingual Sentence Representations
 
-This repository contains the data and code to reproduce the results of our paper: https://arxiv.org/. 
+This repository contains the data and code to reproduce the results of our paper: https://arxiv.org/abs/1803.01400 
 It also contains the cross-lingual word embeddings that we used in our experiments, translated variants of SNLI, and our code to map embeddings of two languages into common space.
 
 Please use the following citation:
@@ -9,9 +9,9 @@ Please use the following citation:
 @article{rueckle:2018,
   title = {Concatenated p-mean Embeddings as Universal Cross-Lingual Sentence Representations},
   author = {R{\"u}ckl{\'e}, Andreas and Eger, Steffen and Peyrard, Maxime and Gurevych, Iryna},
-  journal = {ArXiv},
+  journal = {arXiv},
   year = {2018},
-  url = "https://arxiv.org"
+  url = "https://arxiv.org/abs/1803.01400"
 }
 ```
 
