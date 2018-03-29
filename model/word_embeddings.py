@@ -61,9 +61,9 @@ class WordEmbeddings(object):
         bar = ProgressBar(widgets=widgets, max_value=self.file_n_lines).start()
 
         if self.embeddings_filename.endswith('.gz'):
-            f = gzip.open(embeddings_path, 'r')
+            f = gzip.open(embeddings_path, 'rt')
         else:
-            f = io.open(embeddings_path, 'r', encoding='utf-8')
+            f = io.open(embeddings_path, 'rt', encoding='utf-8')
 
         try:
             for i, line in enumerate(f):
