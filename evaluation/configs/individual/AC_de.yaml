@@ -1,0 +1,47 @@
+data-module: experiment.sentence_classification.data.EMB_server_random_subsample_validation
+model-module: experiment.sentence_classification.model.linear
+training-module: experiment.sentence_classification.training
+evaluation-module: experiment.sentence_classification.evaluation
+
+logger:
+  level: INFO
+
+global:
+  empty: true
+
+data:
+  dev_ratio: 0.2
+  test_ratio: 0.2
+  train_language: en
+
+  # embeddings to use/concatenate
+  embedding_types: [mapped_bivcd_en_de, mapped_attract_repel_en_de]
+  # the chosen p-means
+  operations: [mean, min, max]
+  # url of the embedding server HTTP API
+  emb_server_url: http://127.0.0.1:8080
+
+  # files to train and evaluate on (train language determined by "train_language")
+  all_files:
+    - sentences: ../data/AC/amClaims.de
+      labels: ../data/AC/amClaims.labels
+    - sentences: ../data/AC/amClaims.en
+      labels: ../data/AC/amClaims.labels
+
+model:
+  # no model parameters
+  empty: true
+
+training:
+  epochs: 1000
+  early_stopping_patience: 5
+  dropout: 0
+
+  optimizer: adam
+  initial_learning_rate: 0.01
+
+  batchsize: 32
+  batchsize_test: 256
+
+evaluation:
+  skip: false
