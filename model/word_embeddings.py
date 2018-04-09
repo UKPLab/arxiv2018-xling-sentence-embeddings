@@ -1,6 +1,7 @@
 import gzip
 import io
 import os
+from collections import OrderedDict
 
 import numpy as np
 import requests
@@ -53,7 +54,7 @@ class WordEmbeddings(object):
     def load_vectors(self, embeddings_folder, logger):
         logger.info('Loading "{}" word embeddings into memory...'.format(self.alias))
         embeddings_path = os.path.join(embeddings_folder, self.embeddings_filename)
-        self.vectors = dict()
+        self.vectors = OrderedDict()
 
         widgets = [Percentage(), ' of {}K'.format(int(self.file_n_lines / 1000)),
                    ' ', Bar(), ' ', Timer(), ' ', AdaptiveETA()]
@@ -93,3 +94,67 @@ class WordEmbeddings(object):
             bar.finish()
 
         logger.info('Done!')
+
+
+ukp_embeddings_share_url = 'https://public.ukp.informatik.tu-darmstadt.de/arxiv2018-xling-sentence-embeddings'
+ukp_xling_embeddings_share_url = '{}/xling-wordembeddings'.format(ukp_embeddings_share_url)
+ukp_monoling_embeddings_share_url = '{}/monolingual-wordembeddings'.format(ukp_embeddings_share_url)
+
+embeddings = {
+    'en-de': [
+        WordEmbeddings(
+            'mapped_bivcd_en_de', ukp_xling_embeddings_share_url, 'mapped_bivcd_en_de.txt.gz',
+            approximate_filesize=101035275, file_n_lines=86761, lowercased=True
+        ),
+        WordEmbeddings(
+            'mapped_attract_repel_en_de', ukp_xling_embeddings_share_url, 'mapped_attract_repel_en_de.txt.gz',
+            approximate_filesize=270155631, file_n_lines=234036, lowercased=True
+        ),
+        WordEmbeddings(
+            # this is the small FT version. See full version in the comments below
+            'mapped_fasttext_en_de', ukp_xling_embeddings_share_url, 'mapped_fasttext_300k_en_de.txt.gz',
+            approximate_filesize=680901729, file_n_lines=599959, lowercased=True
+        ),
+        # WordEmbeddings(
+        #    'mapped_fasttext_en_de', ukp_xling_embeddings_share_url, 'mapped_fasttext_en_de.txt.gz',
+        #    approximate_filesize=5561825768, file_n_lines=4794000, lowercased=True
+        # ),
+    ],
+    'en-fr': [
+        WordEmbeddings(
+            'mapped_bivcd_en_fr', ukp_xling_embeddings_share_url, 'mapped_bivcd_en_fr.txt.gz',
+            approximate_filesize=173658707, file_n_lines=149255, lowercased=True
+        ),
+        WordEmbeddings(
+            'mapped_attract_repel_en_fr', ukp_xling_embeddings_share_url, 'mapped_attract_repel_en_fr.txt.gz',
+            approximate_filesize=318510281, file_n_lines=276513, lowercased=True
+        ),
+        WordEmbeddings(
+            # this is the small FT version. See full version in the comments below
+            'mapped_fasttext_en_fr', ukp_xling_embeddings_share_url, 'mapped_fasttext_300k_en_fr.txt.gz',
+            approximate_filesize=678257779, file_n_lines=598857, lowercased=True
+        ),
+        # WordEmbeddings
+        #    'mapped_fasttext_en_fr', ukp_xling_embeddings_share_url, 'mapped_fasttext_en_fr.txt.gz',
+        #    approximate_filesize=4238398397, file_n_lines=3661392, lowercased=True
+        # ),
+    ],
+    'monolingual': [
+        WordEmbeddings(
+            'glove', ukp_monoling_embeddings_share_url, 'glove.840B.300d.txt.gz',
+            approximate_filesize=2176768669, file_n_lines=8175104, lowercased=False
+        ),
+        WordEmbeddings(
+            'gnews', ukp_monoling_embeddings_share_url, 'G.utf8.gz',
+            approximate_filesize=8407252992, file_n_lines=2930018, lowercased=False
+        ),
+        WordEmbeddings(
+            'komninos_attract_repel', ukp_monoling_embeddings_share_url, 'Komninos.attract-repel.gz',
+            approximate_filesize=220019840, file_n_lines=857908, lowercased=True
+        ),
+        WordEmbeddings(
+            'morph_specialized', ukp_monoling_embeddings_share_url, 'english-morph-fitted.txt.simple.gz',
+            approximate_filesize=1356373227, file_n_lines=5250747, lowercased=True
+        ),
+    ]
+}

@@ -30,7 +30,22 @@ https://www.tu-darmstadt.de/
 
 ## Usage
 
-To use our sentence embedding model, run the following commands:
+We offer several [TF-Hub](https://www.tensorflow.org/hub/) modules for convenience:
+
+```
+url_de = https://public.ukp.informatik.tu-darmstadt.de/arxiv2018-xling-sentence-embeddings/tf-hub/en-de/1
+url_fr = https://public.ukp.informatik.tu-darmstadt.de/arxiv2018-xling-sentence-embeddings/tf-hub/en-fr/1
+url_monolingual = https://public.ukp.informatik.tu-darmstadt.de/arxiv2018-xling-sentence-embeddings/tf-hub/monolingual/1
+
+embed = hub.Module(url)
+representations = embed(["A_en long_en sentence_en ._en", "another_en sentence_en"])
+```
+
+The input strings have to be tokenized (tokens split by spaces), postfixed with _en/_de/_fr (except for the monolingual model) **and lowercased**. (We usually don't lowercase everything but at this time we don't see a simple method of doing this in a saved TF graph.)
+
+
+For full reproducibility please use our python code:
+
 ```
 cd model
 pip install -r requirements.txt

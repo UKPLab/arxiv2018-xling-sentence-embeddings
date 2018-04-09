@@ -6,7 +6,7 @@ and starts a webserver that allows researchers to generate sentence embeddings o
 
 ## Requirements
 
-   * Python 2.7
+   * Python 2.7 (also works with python 3)
 
 
 ## Setup
@@ -47,3 +47,8 @@ available operations (compression strategies, p-means). You can add new entries 
 operations such as additional p-means, moments, or further compression and summarization strategies.
 
 All of those newly defined operations (and word embeddings) will appear in the web interface.
+
+
+## TF Hub Modules
+
+We created the [TF-Hub](https://www.tensorflow.org/hub/) modules (see readme.md in project root) with the `tfhub.py`. The behavior of the TF-Hub modules differs slightly from the python version because we do not automatically lowercase strings if the word embeddings are lowercased. 
