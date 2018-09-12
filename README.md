@@ -41,7 +41,7 @@ embed = hub.Module(url)
 representations = embed(["A_en long_en sentence_en ._en", "another_en sentence_en"])
 ```
 
-The input strings have to be tokenized (tokens split by spaces), postfixed with _en/_de/_fr (except for the monolingual model) **and lowercased**. (We usually don't lowercase everything but at this time we don't see a simple method of doing this in a saved TF graph.)
+The input strings have to be tokenized (tokens split by spaces), postfixed with _en/_de/_fr (except for the monolingual model) **and lowercased**. (We usually don't lowercase everything but at this time we don't see a simple method of doing this in a saved TF graph.) If you want to work with non-lowercased sequences, download and run the model as described below.
 
 
 For full reproducibility please use our python code:
