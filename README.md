@@ -55,8 +55,7 @@ python main.py
 
 The figure below shows the average monolingual performance of the different sentence embeddings models that we tested in relation to their dimensionality (this is figure 1 from our paper). The TF-Hub modules contain our full model (all power means and concatenations). The python code in ```/model``` can be used to obtain sentence embeddings for other concatenations and power mean combinations. To achieve the best results with our models, we recommend normalizing the sentence embeddings with the z-norm.
 
-![Figure1](/figure-1.png?raw=true)
-
+<img src="https://github.com/UKPLab/arxiv2018-xling-sentence-embeddings/raw/master/figure-1.png?raw=true" width="500px">
 
 
 ## Sub-Projects
