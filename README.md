@@ -18,7 +18,7 @@ Please use the following citation:
 > **Abstract:** Average word embeddings are a common baseline for more sophisticated sentence embedding techniques. However, they typically fall short of the performances of more complex models such as InferSent. Here, we generalize the concept of average word embeddings to power mean word embeddings. We show that the concatenation of different types of power mean word embeddings considerably closes the gap to state-of-the-art methods monolingually and substantially outperforms these more complex techniques cross-lingually. In addition, our proposed method outperforms different recently proposed baselines such as SIF and Sent2Vec by a solid margin, thus constituting a much harder-to-beat monolingual baseline.
 
 
-Contact person: Andreas Rücklé
+Contact persons: Andreas Rücklé, Steffen Eger
 
 https://www.ukp.tu-darmstadt.de/
 
