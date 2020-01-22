@@ -1,4 +1,4 @@
-# Concatenated Power Mean Embeddings as Universal Cross-Lingual Sentence Representations
+# Concatenated Power Mean Word Embeddings as Universal Cross-Lingual Sentence Representations
 
 This repository contains the data and code to reproduce the results of our paper: https://arxiv.org/abs/1803.01400 
 It also contains the cross-lingual word embeddings that we used in our experiments, translated variants of SNLI, and our code to map embeddings of two languages into common space.
@@ -7,7 +7,7 @@ Please use the following citation:
 
 ```
 @article{rueckle:2018,
-  title = {Concatenated Power Mean Embeddings as Universal Cross-Lingual Sentence Representations},
+  title = {Concatenated Power Mean Word Embeddings as Universal Cross-Lingual Sentence Representations},
   author = {R{\"u}ckl{\'e}, Andreas and Eger, Steffen and Peyrard, Maxime and Gurevych, Iryna},
   journal = {arXiv},
   year = {2018},
