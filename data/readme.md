@@ -32,6 +32,10 @@ The above contain SNLI with all possible language combinations of the sentence p
 
 > We plan to release translated SNLI corpora in different languages soon (de,fr,es,ar).
 
+## Translated downstream tasks
+
+[MR, CR, etc.](https://public.ukp.informatik.tu-darmstadt.de/arxiv2018-xling-sentence-embeddings/Translated-Datasets.zip)
+
 
 ## Licenses
 
